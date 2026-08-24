@@ -1,7 +1,7 @@
 {
-  "name": "@interop/isomorphic-lib-template",
-  "description": "A Typescript/Javascript isomorphic library template, for use in the browser, Node.js, and React Native.",
-  "version": "0.0.1",
+  "name": "@interop/logger",
+  "description": "Namespaced, leveled, structured logging over pluggable sinks, for the browser, Node.js, and React Native.",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "build": "pnpm run clear && tsc",
@@ -29,14 +29,18 @@
       "react-native": "./dist/index.js",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.js",
+      "default": "./dist/vite.js"
     }
   },
   "module": "dist/index.js",
   "browser": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
@@ -57,7 +61,11 @@
     "provenance": true
   },
   "keywords": [
-    "isomorphic"
+    "logging",
+    "logger",
+    "isomorphic",
+    "ndjson",
+    "diagnostics"
   ],
   "packageManager": "pnpm@11.5.0",
   "engines": {
@@ -70,8 +78,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/interop-alliance/isomorphic-lib-template.git"
+    "url": "git+https://github.com/interop-alliance/logger.git"
   },
-  "homepage": "https://github.com/interop-alliance/isomorphic-lib-template",
-  "bugs": "https://github.com/interop-alliance/isomorphic-lib-template/issues"
+  "homepage": "https://github.com/interop-alliance/logger",
+  "bugs": "https://github.com/interop-alliance/logger/issues"
 }
