@@ -1,6 +1,6 @@
 # @interop/logger Changelog
 
-## 0.1.0 - TBD
+## 0.1.0 - 2026-08-23
 
 ### Added
 
