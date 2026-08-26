@@ -1,7 +1,7 @@
 {
   "name": "@interop/logger",
   "description": "Namespaced, leveled, structured logging over pluggable sinks, for the browser, Node.js, and React Native.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "build": "pnpm run clear && tsc",
@@ -40,7 +40,6 @@
   "browser": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
-  "dependencies": {},
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.60.0",
