@@ -96,12 +96,16 @@ sink via the raw console), and only three consecutive throws disable a sink.
 
 ## The library port
 
-A library takes the structural `Logger` type as a type-only import
-(`@interop/logger` in `devDependencies`), keeps a module-level
-`let logger: Logger = consoleFallback`, and exports
-`setLogger(logger: Logger): Logger` from its package root, returning the
-previous logger so tests can restore it. The app wires each library once at
-bootstrap:
+A library declares the structural `Logger` port locally, in its one port module
+-- declaration emit would otherwise carry the `@interop/logger` specifier into
+the published `.d.ts` for any port used in an exported signature, so the
+interface is written out rather than imported. The module keeps a module-level
+`let logger: Logger = consoleFallback` and exports
+`setLogger(logger: Logger): Logger` from the package root, returning the
+previous logger so tests can restore it. `@interop/logger` stays in
+`devDependencies` and is imported only as `import type`, in the library's own
+tests, where a mutual-assignability check pins the local declaration to the
+package's `Logger`. The app wires each library once at bootstrap:
 
 ```ts
 import { createLogger } from '@interop/logger'

@@ -7,19 +7,26 @@ afterEach(() => {
 })
 
 describe('the default console sink', () => {
+  const time = expect.stringMatching(/^\d{2}:\d{2}:\d{2}\.\d{3}$/)
+
   it('is installed by default and maps level onto the console method', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const err = new Error('boom')
     createLogger('fw:test').warn('failed', { err, spaceId: 'abc' })
-    expect(warn).toHaveBeenCalledWith('[%s] %s', 'fw:test', 'failed', err, {
-      spaceId: 'abc'
-    })
+    expect(warn).toHaveBeenCalledWith(
+      '%s [%s] %s',
+      time,
+      'fw:test',
+      'failed',
+      err,
+      { spaceId: 'abc' }
+    )
   })
 
-  it('passes empty strings for absent err and data', () => {
+  it('omits absent err and data instead of padding with empty strings', () => {
     const info = vi.spyOn(console, 'info').mockImplementation(() => {})
     createLogger('fw:test').info('mark')
-    expect(info).toHaveBeenCalledWith('[%s] %s', 'fw:test', 'mark', '', '')
+    expect(info).toHaveBeenCalledWith('%s [%s] %s', time, 'fw:test', 'mark')
   })
 
   it('configure({ console: false }) removes it; true reinstalls, once', () => {

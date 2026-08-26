@@ -1,5 +1,13 @@
 # @interop/logger Changelog
 
+## 0.2.0 - TBD
+
+### Changed
+
+- Console sink lines now start with the event's UTC time (`HH:MM:SS.mmm`), and
+  absent `err`/`data` arguments are omitted instead of padded with empty strings
+  (no more trailing `<empty string>` in devtools).
+
 ## 0.1.0 - 2026-08-23
 
 ### Added

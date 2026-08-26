@@ -2,6 +2,11 @@
 
 - Status: accepted
 - Date: 2026-08-23
+- Amendments: 2026-08-23: corrected the type-only-import clause -- a
+  library declares `Logger` locally in its port module instead of
+  importing the type; the type-only import and the assignability
+  check against `@interop/logger`'s own `Logger` move to the
+  library's tests.
 - Driving work: the logging-seam design (how libraries emit without
   a runtime dependency)
 - Affects: `@interop/logger` (the `Logger` port); every logging
@@ -28,6 +33,25 @@ stated, scoped exception to the no-vendoring rule) and exports
 `setLogger(logger: Logger): Logger` from its package root, returning
 the PREVIOUS logger so tests can restore it. The app wires each
 library once at bootstrap.
+
+**Amendment (2026-08-23).** The type-only-import clause above conflicts
+with the no-reference clause for a port used in an exported signature:
+TypeScript's declaration emit re-imports a type used in a public
+signature, so `import type { Logger } from '@interop/logger'` inside the
+port module would land in the emitted `dist/*.d.ts` after all, and the
+bare specifier would make the package a soft types dependency of every
+consumer (a consumer without it installed fails typechecking against the
+library's `.d.ts` unless `skipLibCheck` hides it). The corrected recipe,
+implemented in wallet-core (the first library converted): the port module
+declares the structural `Logger` interface locally instead of importing
+it -- the same scoped-vendoring exception this decision already grants
+the 6-line console fallback, safe because the port is frozen at four
+two-arg methods and deliberately structural, so its identity is its
+shape. The type-only import from `@interop/logger` and a mutual-
+assignability check (both directions, against the locally declared
+interface) move to the library's test suite instead. The `dist/` grep
+still enforces "no reference"; it now covers all of `dist/`, `.d.ts`
+files included.
 
 ## Rejected Alternatives
 

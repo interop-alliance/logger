@@ -80,19 +80,17 @@ export function addSink(sink: Sink): () => void {
 
 /**
  * The default console sink: maps level onto console.debug/info/warn/error,
- * passing `err` and `data` through unserialized so devtools inspection
- * keeps working.
+ * prefixing each line with the event's UTC time (HH:MM:SS.mmm) and passing
+ * `err` and `data` through unserialized so devtools inspection keeps
+ * working. Absent `err`/`data` are omitted rather than padded, so a bare
+ * message line carries no trailing empty-string arguments.
  *
  * @param event {LogEvent}
  */
 function consoleSink(event: LogEvent): void {
-  console[event.level](
-    '[%s] %s',
-    event.ns,
-    event.msg,
-    event.err ?? '',
-    event.data ?? ''
-  )
+  const time = new Date(event.ts).toISOString().slice(11, 23)
+  const extras = [event.err, event.data].filter(value => value !== undefined)
+  console[event.level]('%s [%s] %s', time, event.ns, event.msg, ...extras)
 }
 
 addSink(consoleSink)
