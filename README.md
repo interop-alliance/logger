@@ -59,7 +59,7 @@ when the namespace matches the current filter.
 
 Namespaces are colon-separated lowercase segments, `<prefix>:<area>[:<sub>...]`,
 the leading segment identifying the emitting package: `fw:` (freewallet), `wc:`
-(wallet-core), `wr:` (was-react), `dcw:`.
+(wallet-core), `wr:` (was-react), `sync:` (was-sync), `dcw:`.
 
 The filter grammar is a comma-separated pattern list; `*` matches any suffix; a
 `-` prefix negates: `fw:*`, `fw:session:*,-fw:session:noise`, `*`. Sources, in
