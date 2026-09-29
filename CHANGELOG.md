@@ -1,5 +1,14 @@
 # @interop/logger Changelog
 
+## 0.2.1 - TBD
+
+### Changed
+
+- README: the redaction convention now lists its rules in full, including
+  forbidden credential-derived identifiers and the strip-then-truncate rule for
+  server-served identifiers (control and bidi characters removed, 64 characters,
+  `...` suffix).
+
 ## 0.2.0 - 2026-08-25
 
 ### Changed

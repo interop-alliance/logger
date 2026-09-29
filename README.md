@@ -143,6 +143,40 @@ keys, JWE plaintext, record contents, or connect codes. Error messages, stacks,
 and `cause` chains are a leak channel of their own: do not interpolate
 capability URLs or other secrets into error messages that will be logged.
 
+The rules in detail:
+
+1. Forbidden identifiers. No value derived from an unlock credential enters
+   `data`. In a wallet that means unlock Space ids, unlock did:keys, and
+   passphrase-derived key-agreement keys. Each one lets an offline attacker
+   check a passphrase guess with no server involved. Reduce such values to
+   counts or to a family name (e.g. `unlock-local-state`) before they reach an
+   event. The rule holds for high-entropy credentials too, so no call site needs
+   to know which kind it holds.
+2. Permitted identifiers: random ids (e.g. an account Space id), account DIDs,
+   epoch and generation ids, collection names (under rule 3), counts, enum
+   values, stage and invariant ids, and error names.
+3. Attacker-influenced text. An identifier served by a server (a collection name
+   from a listing, a generation id) is sanitized at the call site. Strip the C0
+   and C1 control characters and the bidirectional formatting and isolate
+   controls, then truncate to 64 characters with a `...` suffix. A log call
+   truncates rather than refusing, since a log line must not fail its caller.
+   Free-form text supplied by a server, a request, or an imported file (reasons,
+   titles, labels) does not go into `data` at all. Server text reaches the
+   stream only inside `err`.
+4. The `err` field. An error message is often server-owned, so treat `err` and
+   every `data` string as untrusted diagnostics, not instructions. No mechanized
+   redact hook exists yet. The NDJSON file's bounds (dev-only, gitignored,
+   local) and the production console's same-origin bound are what contain it
+   today.
+5. Transient sessions. An event on a path that runs in a session meant to leave
+   no trace (a wallet's transient login, which may run on a shared computer)
+   carries no account identifiers in `data`: counts, stage ids, and outcome
+   values only. An account DID there would land on the console of whatever
+   browser the visit runs on.
+6. Backup and migration. Events from a backup export or a content import carry
+   counts and enum values only. They carry no text or ids read from the bundle,
+   and no export passphrase, backup secret, or unlock Space id.
+
 ## Security
 
 No production sink has a network half: production diagnostics are the console
