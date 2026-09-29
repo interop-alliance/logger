@@ -56,7 +56,8 @@
     "vitest": "^4.1.7"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "keywords": [
     "logging",
